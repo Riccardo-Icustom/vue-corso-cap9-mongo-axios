@@ -1,0 +1,65 @@
+<script setup>
+    import {onMounted,toRefs, watch} from 'vue';
+    import { useTaskStore } from '@/stores/taskStore';
+    import ButtonComponent from '../components/UiButton.vue'
+    import { useRouter } from 'vue-router'; 
+    import { storeToRefs } from 'pinia'
+    import UiLoader from '../components/UiLoader.vue'
+
+    const taskStore = useTaskStore();   
+
+    const {singletask,loading}  = storeToRefs(taskStore)
+    const router = useRouter();
+
+    const props = defineProps(['id'])
+    
+    const {id} = toRefs(props);
+
+
+     const getTask = async (id) => {
+        await taskStore.getSingleTask(id)
+
+        //null se l'id non esiste
+       // console.log(taskStore.singletask)
+        if (!taskStore.singletask) {
+                router.replace({name:'notfound'})
+        }           
+    }
+
+    onMounted(()=>{
+        getTask(id.value); 
+    })
+
+    const handleBack = () => {
+        router.back();
+    }
+
+    watch(
+        () => id.value,
+        async newId => {
+            getTask(newId);         
+        }
+    )
+</script>
+<template>
+<div class="max-w-5xl mx-auto p-8">
+    <UiLoader v-if="loading"/>
+    <template v-if="singletask && !loading">
+        <ButtonComponent   @click="handleBack">Torna indietro</ButtonComponent> 
+        <div :class="`mt-4 p-4 ${singletask.favorite ? 'bg-red-300' : 'bg-green-300'} text-xl font-bold rounded-t-xl`">
+            ID:{{singletask.fakeid}}
+        </div>
+        <div class="flex p-4 bg-green-200 h-96 items-center text-center align-middle rounded-b-xl">
+            {{singletask.title}}
+        </div>
+    </template>    
+    <div class="flex flex-row gap-4 my-4">
+        <router-link :to="{name:'taskdetailcomments'}">Commenti</router-link>
+        <router-link :to="{name:'taskdetailgallery'}">Gallery</router-link>
+    </div>
+    <router-view></router-view>
+</div>
+<!--
+<pre>{{ JSON.stringify($route.params.id,undefined,2) }}</pre>
+<pre>{{ JSON.stringify(singletask,undefined,2) }}</pre>-->
+</template>

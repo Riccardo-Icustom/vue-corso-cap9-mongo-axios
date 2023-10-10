@@ -1,0 +1,34 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Primo Task",
+      "favorite": true
+    },
+    {
+      "id": 2,
+      "title": "Secondo Task",
+      "favorite": true
+    },
+    {
+      "id": 3,
+      "title": "Terzo Task",
+      "favorite": false
+    },
+    {
+      "id": 24708,
+      "title": "rererer",
+      "favorite": true
+    },
+    {
+      "id": 732142,
+      "title": "test",
+      "favorite": true
+    },
+    {
+      "id": 843821,
+      "title": "test",
+      "favorite": false
+    }
+  ]
+}
